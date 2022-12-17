@@ -232,7 +232,7 @@
       });
       form.addEventListener("submit", (e) => {
         e.preventDefault();
-        btnShorten.innerHTML = "Loading..."
+        btnShorten.innerHTML = "<span class = 'load'>Loading...</span>"
         const apiRequest = `https://api.shrtco.de/v2/shorten?url=${URLinput.value}`;
         console.log(apiRequest);
         fetch(apiRequest)
@@ -259,7 +259,7 @@
           .catch((error) => console.log(error.message));
       });
 
-      // window.addEventListener("click", () => {
+      // window.addEv~entListener("click", () => {
       //   if ((navContent.style.display === "flex"))
       //     navContent.style.display = "none";
       // });
