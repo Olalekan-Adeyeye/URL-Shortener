@@ -72,36 +72,15 @@
             <form class="link-input">
               <input
                 type="url"
-                name="url"
+                name="input-url"
                 id="input-url"
                 placeholder="Shorten a link here..."
+                required
               />
-              <button type="submit">Shorten It!</button>
+              <button type="submit" class="btnShorten">Shorten It!</button>
             </form>
           </div>
-          <div class="link-shortened">
-            <div class="link-shortened-wrapper">
-              <p class="link-shortened-long">https://www.facebook.com/signup</p>
-              <div>
-                <p class="link-shortened-short">bit.ly/sds</p>
-                <button>Copy</button>
-              </div>
-            </div>
-            <div class="link-shortened-wrapper">
-              <p class="link-shortened-long">https://www.facebook.com/signup</p>
-              <div>
-                <p class="link-shortened-short">bit.ly/sds</p>
-                <button>Copy</button>
-              </div>
-            </div>
-            <div class="link-shortened-wrapper">
-              <p class="link-shortened-long">https://www.facebook.com/signup</p>
-              <div>
-                <p class="link-shortened-short">bit.ly/sds</p>
-                <button>Copy</button>
-              </div>
-            </div>
-          </div>
+          <div class="link-shortened"></div>
 
           <section class="about">
             <div class="about-header">
@@ -237,29 +216,11 @@
         </div>
       </div>
     </footer>
-
-    <!--
-
-  Features
-
-  Link Shortening
-  Branded Links
-  Analytics
-
-  Resources
-
-  Blog
-  Developers
-  Support
-
-  Company
-
-  About
-  Our Team
-  Careers
-  Contact -->
-
     <script>
+      const shortenedWrapper = document.querySelector(".link-shortened");
+      const form = document.querySelector(".link-input");
+      const URLinput = document.querySelector("#input-url");
+      const btnShorten = document.querySelector(".btnShorten");
       const navContent = document.querySelector(".nav-content");
       const hamburger = document.querySelector(".hamburger");
       hamburger.addEventListener("click", () => {
@@ -268,6 +229,34 @@
         else {
           navContent.style.display = "flex";
         }
+      });
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        btnShorten.innerHTML = "Loading..."
+        const apiRequest = `https://api.shrtco.de/v2/shorten?url=${URLinput.value}`;
+        console.log(apiRequest);
+        fetch(apiRequest)
+          .then((res) => {
+            if (!res.ok) {
+              throw Error("Something went wrong");
+              btnShorten.innerHTML = "Shorten It!"
+            }
+            return res.json();
+          })
+          .then((data) => {
+            btnShorten.innerHTML = "Shorten It!"
+            let content = ` 
+              <div class="link-shortened-wrapper">
+                  <p class="link-shortened-long">${URLinput.value}</p>
+                <div>
+                  <p class="link-shortened-short">${data.result.short_link2}</p>
+                  <button>Copy</button>
+                </div>
+              </div>
+              `;
+            shortenedWrapper.innerHTML += content;
+          })
+          .catch((error) => console.log(error.message));
       });
 
       // window.addEventListener("click", () => {
